@@ -8,3 +8,19 @@
 | **Jay Patel (KU2407U302)**     | Visualization Expert  |
 | **Smeet Goswami (KU2407U379)** | Presentation Lead          |
 | **Pavan Savani (KU2407U368)**     | Developer    |
+
+---
+
+## Libraries
+- Flask
+- Torch
+- StableDiffusionPipeline
+- Accelerator
+- Transformer
+ 
+Install dependencies using:
+```bash
+pip install flask torch diffusers accelerator transformer
+```
+
+---
