@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a3a);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(42, 42, 58, 0.95);
+            border-radius: 15px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        input {
+            width: 85%;
+            padding: 14px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: #3a3a4a;
+            color: #ffffff;
+        }
+
+        button {
+            padding: 14px 28px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #ff5733, #ff914d);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #e04e2a, #ff6f3c);
+        }
+
+        .image-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: #3a3a4a;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading {
+            display: none;
+            font-size: 18px;
+            margin-top: 15px;
+            color: #ff914d;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI Image Generator</h1>
+        <input type="text" id="prompt" placeholder="Enter image description">
+        <button onclick="generateImage()">Generate</button>
+        <p class="loading" id="loadingText">Generating image, please wait...</p>
+        <br>
+        <div class="image-container" id="imageContainer">
+            <h3>Generated Image:</h3>
+            <img id="generatedImage" />
+        </div>
+    </div>
+
+    <script>
+        function generateImage() {
+            let prompt = document.getElementById("prompt").value;
+            let loadingText = document.getElementById("loadingText");
+            let imgContainer = document.getElementById("imageContainer");
+            let img = document.getElementById("generatedImage");
+
+            // Show loading animation
+            loadingText.style.display = "block";
+            imgContainer.style.display = "none";
+
+            fetch("/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: prompt })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingText.style.display = "none";
+                    if (data.image_url) {
+                        img.src = data.image_url;
+                        imgContainer.style.display = "block";
+                    } else {
+                        alert("Error generating image: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    loadingText.style.display = "none";
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
