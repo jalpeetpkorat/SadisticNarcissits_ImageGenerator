@@ -1,4 +1,4 @@
-# COVID-19 Global Dashboard
+# Image Generator
 
 ## Team Members
 | Name             | Role                  |
